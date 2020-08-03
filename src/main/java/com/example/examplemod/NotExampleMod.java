@@ -3,13 +3,10 @@ package com.example.examplemod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -21,11 +18,8 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.net.URL;
 
@@ -41,6 +35,7 @@ public class ExampleMod
         if(event.getSide()== Side.CLIENT){
 
             MinecraftForge.EVENT_BUS.register(this);
+            System.out.print("我好了\n");
         }
 
     }
@@ -51,9 +46,6 @@ public class ExampleMod
     public void renderPlayer(RenderPlayerEvent.Post event)
     {
         EntityPlayer player = event.entityPlayer;
-
-        if(done.contains(player.getName()))
-            return;
 
         String uuid = player.getUniqueID().toString().replace("-","");
 
