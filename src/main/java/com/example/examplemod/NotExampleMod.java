@@ -21,48 +21,49 @@ import net.minecraftforge.fml.relauncher.Side;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URL;
 
-@Mod(modid = ExampleMod.MODID, version = ExampleMod.VERSION)
-public class ExampleMod
+@Mod(modid = NotExampleMod.MODID, version = NotExampleMod.VERSION)
+public class NotExampleMod
 {
     public static final String MODID = "antennae";
-    public static final String VERSION = "1.0";
-    
+    public static final String VERSION = "1.1";
+
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
         if(event.getSide()== Side.CLIENT){
 
             MinecraftForge.EVENT_BUS.register(this);
-            System.out.print("我好了\n");
         }
 
     }
 
-    private static String done = "";
+    private static String nothave = "";
 
     @SubscribeEvent
     public void renderPlayer(RenderPlayerEvent.Post event)
     {
         EntityPlayer player = event.entityPlayer;
-
         String uuid = player.getUniqueID().toString().replace("-","");
 
-        if (player instanceof AbstractClientPlayer)
+        if (player instanceof AbstractClientPlayer && !nothave.contains(player.getName()))
         {
             AbstractClientPlayer acp = (AbstractClientPlayer) player;
 
             if (acp.hasPlayerInfo())
             {
                 NetworkPlayerInfo playerInfo = ObfuscationReflectionHelper.getPrivateValue(AbstractClientPlayer.class, acp, "field_175157_a");
-                ResourceLocation cape = new ResourceLocation(MODID, String.format("capes/%s", uuid));
-                System.out.print(String.format("capes/%s", uuid)+"\n");
+                if(playerInfo.getLocationCape()==null) {
 
-                if(loadCape(cape, uuid))
-                    ObfuscationReflectionHelper.setPrivateValue(NetworkPlayerInfo.class, playerInfo, cape, "locationCape");
+                    ResourceLocation cape = new ResourceLocation(MODID, String.format("capes/%s", uuid));
+                    if(loadCape(cape, uuid))
+                        ObfuscationReflectionHelper.setPrivateValue(NetworkPlayerInfo.class, playerInfo, cape, "field_178862_f");
+                    else
+                        nothave+=player.getName();
 
-                done+=player.getName();
+                }
             }
         }
     }
